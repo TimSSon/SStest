@@ -17,14 +17,12 @@
         <form id='user_form' action="{% url 'accounts:change' user_obj.pk %}" method="post"
             enctype="multipart/form-data">
             {% csrf_token %}
-            {% comment %}
             {% include 'partial/twoforms.html' with form1=form form2=profile_form fields_only=True button_class="btn_update" button_text="Сохранить" %}
-            {% endcomment %}
-            {% include 'partial/form.html' with form=form fields_only=True button_class='hidden' %}
+            {% comment %} {% include 'partial/form.html' with form=form fields_only=True button_class='hidden' %}
         </form>
         <form id='profile_form' action="{% url 'accounts:change' user_obj.pk %}" method="post"
             enctype="multipart/form-data">
-            {% include 'partial/form.html' with form=profile_form fields_only=True %}
+            {% include 'partial/form.html' with form=profile_form fields_only=True %} {% endcomment %}
         </form>
     </div>
 </div>
@@ -34,7 +32,29 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    function submitForm1() {
+    $('form').submit(function (event) {
+        event.preventDefault();
+        let data = $('#user_form').serialize();
+        $.ajax({
+            type: "POST",
+            dataType: 'html',
+            enctype: "multipart/form-data",
+            url: "{% url 'accounts:change' user_obj.pk %}",
+            data: data,
+            success: function (data, tst, xhr) {
+                console.log('XHR OK');
+            },
+            error: function (xhr, tst, err) {
+                console.log('XHR ERROR ' + XMLHttpRequest.status);
+                console.log(data);
+            },
+
+        });
+    })
+</script>
+{% comment %} <script>
+    function submitForm1(e) {
+        e.preventdefault()
         var data = $('#user_form').serialize();
         return $.ajax({
             type: "POST",
@@ -50,9 +70,10 @@
                 $.log(data);
             },
         });
-    });
+    };
 
-    function submitForm2() {
+    function submitForm2(e) {
+        e.preventdefault()
         var data = $('#profile_form').serialize();
         return $.ajax({
             type: "POST",
@@ -68,11 +89,11 @@
                 $.log(data);
             },
         });
-    });
+    };
 
-    submitForm2().done(function () {
-        submitForm1();
+    submitForm1().done(function () {
+        submitForm2();
     });
-</script>
+</script> {% endcomment %}
 
 {% endblock scripts %}

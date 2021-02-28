@@ -15,6 +15,7 @@ from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm
     PasswordChangeForm, PasswordResetEmailForm, PasswordResetForm
 from .models import AuthToken, Profile
 from django.http import HttpResponse, JsonResponse
+import os
 
 
 class RegisterView(CreateView):
@@ -83,28 +84,34 @@ class UserChangeView(UserPassesTestMixin, UpdateView):
 
     def post(self, *args, **kwargs):
         if self.request.is_ajax and self.request.method == "POST":
-            form = UserChangeForm(self.request.POST)
-            profile_form = ProfileChangeForm(self.request.POST)
-            if form.is_valid and profile_form.is_valid():
-                print(form)
-                print(profile_form)
-                form.save()
+            self.object = self.get_object()
+            profile_form = self.get_profile_form(self.request.POST)
+            form = self.get_user_form(self.request.POST)
+            if form.is_valid() and profile_form.is_valid():
                 profile_form.save()
-                return JsonResponse({"success": True}, status=200)
+                form.save()
+                return HttpResponse('')
             else:
-                return JsonResponse({"success": False}, status=400)
+                return HttpResponse('')
 
-        return JsonResponse({"error": "absolute"}, status=400)
+        return HttpResponse('')
 
-    def get_success_url(self):
+    def get_success_url(self, req):
         return reverse('accounts:detail', kwargs={'pk': self.object.pk})
 
-    def get_profile_form(self):
+    def get_profile_form(self, *args, **kwargs):
         form_kwargs = {'instance': self.object.profile}
         if self.request.method == 'POST':
             form_kwargs['data'] = self.request.POST
             form_kwargs['files'] = self.request.FILES
         return ProfileChangeForm(**form_kwargs)
+
+    def get_user_form(self, *args, **kwargs):
+        form_kwargs = {'instance': self.object}
+        if self.request.method == 'POST':
+            form_kwargs['data'] = self.request.POST
+            form_kwargs['files'] = self.request.FILES
+        return UserChangeForm(**form_kwargs)
 
 
 class UserPasswordChangeView(LoginRequiredMixin, UpdateView):

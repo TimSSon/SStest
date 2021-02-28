@@ -157,6 +157,9 @@ h3 {
     justify-content: space-evenly;
     text-align: center;
 }
+.hidden{
+    display: none;
+}
 .list{
     display: flex;
     flex-direction: row;
