@@ -1,19 +1,78 @@
 {% extends 'base.html' %}
 
+
 {% block title %}Редактировать пользователя{% endblock %}
 
 {% block menu %}
-    <li><a href="{% url "accounts:detail" user_obj.pk %}">Назад</a></li>
-    <li><a href="{% url "accounts:password_change" %}">Смена пароля</a></li>
+<li><a href="{% url "accounts:detail" user_obj.pk %}">Назад</a></li>
+<li><a href="{% url "accounts:password_change" %}">Смена пароля</a></li>
 {% endblock %}
 
 {% block content %}
-    <h2>Поменять личные данные</h2>
-    <form action="{% url 'accounts:change' user_obj.pk %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% include 'partial/form.html' with form=form fields_only=True %}
-        {% include 'partial/form.html' with form=profile_form fields_only=True %}
-        <br>
-        <input type="submit" value="Submit">
-    </form>
+<div class="panel">
+    <div class="panel_title">
+        <h2>Поменять личные данные</h2>
+    </div>
+    <div class="panel_body">
+        <form id='user_form' action="{% url 'accounts:change' user_obj.pk %}" method="post"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            {% comment %}
+            {% include 'partial/twoforms.html' with form1=form form2=profile_form fields_only=True button_class="btn_update" button_text="Сохранить" %}
+            {% endcomment %}
+            {% include 'partial/form.html' with form=form fields_only=True button_class='hidden' %}
+        </form>
+        <form id='profile_form' action="{% url 'accounts:change' user_obj.pk %}" method="post"
+            enctype="multipart/form-data">
+            {% include 'partial/form.html' with form=profile_form fields_only=True %}
+        </form>
+    </div>
+</div>
 {% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function submitForm1() {
+        var data = $('#user_form').serialize();
+        return $.ajax({
+            type: "POST",
+            dataType: 'html',
+            url: "{% url 'accounts:change' user_obj.pk %}",
+            data: data,
+            enctype: "multipart/form-data",
+            success: function (data, tst, xhr) {
+                $.log('XHR OK');
+            },
+            error: function (xhr, tst, err) {
+                $.log('XHR ERROR ' + XMLHttpRequest.status);
+                $.log(data);
+            },
+        });
+    });
+
+    function submitForm2() {
+        var data = $('#profile_form').serialize();
+        return $.ajax({
+            type: "POST",
+            dataType: 'html',
+            url: "{% url 'accounts:change' user_obj.pk %}",
+            data: data,
+            enctype: "multipart/form-data",
+            success: function (data, tst, xhr) {
+                $.log('XHR OK');
+            },
+            error: function (xhr, tst, err) {
+                $.log('XHR ERROR ' + XMLHttpRequest.status);
+                $.log(data);
+            },
+        });
+    });
+
+    submitForm2().done(function () {
+        submitForm1();
+    });
+</script>
+
+{% endblock scripts %}

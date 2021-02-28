@@ -9,6 +9,6 @@
     {% include 'partial/form_field.html' %}
     {% endfor %}
 
-    <br />
-    <input type="submit" value="{{ button_text|default:"Submit" }}" />
+    <br/>
+    <input type="submit" class="{{button_class|default:'btn'}}" value="{{ button_text|default:"Submit" }}" />
 </form>

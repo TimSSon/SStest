@@ -14,6 +14,7 @@ from django.conf import settings
 from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm, \
     PasswordChangeForm, PasswordResetEmailForm, PasswordResetForm
 from .models import AuthToken, Profile
+from django.http import HttpResponse, JsonResponse
 
 
 class RegisterView(CreateView):
@@ -80,23 +81,20 @@ class UserChangeView(UserPassesTestMixin, UpdateView):
             kwargs['profile_form'] = self.get_profile_form()
         return super().get_context_data(**kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        profile_form = self.get_profile_form()
-        if form.is_valid() and profile_form.is_valid():
-            return self.form_valid(form, profile_form)
-        else:
-            return self.form_invalid(form, profile_form)
+    def post(self, *args, **kwargs):
+        if self.request.is_ajax and self.request.method == "POST":
+            form = UserChangeForm(self.request.POST)
+            profile_form = ProfileChangeForm(self.request.POST)
+            if form.is_valid and profile_form.is_valid():
+                print(form)
+                print(profile_form)
+                form.save()
+                profile_form.save()
+                return JsonResponse({"success": True}, status=200)
+            else:
+                return JsonResponse({"success": False}, status=400)
 
-    def form_valid(self, form, profile_form):
-        form.save()
-        profile_form.save()
-        return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, form, profile_form):
-        context = self.get_context_data(form=form, profile_form=profile_form)
-        return self.render_to_response(context)
+        return JsonResponse({"error": "absolute"}, status=400)
 
     def get_success_url(self):
         return reverse('accounts:detail', kwargs={'pk': self.object.pk})
@@ -156,3 +154,7 @@ class UserPasswordResetView(UpdateView):
 
     def get_token(self):
         return AuthToken.get_token(self.kwargs.get('token'))
+
+# class ProfileEditView(UpdateView):
+#     model = Profile
+#     form_class =

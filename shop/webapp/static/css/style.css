@@ -12,7 +12,7 @@
 }
 
 * {
-    font-family: "Poppins", sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin: 0em;
     padding: 0em;
     box-sizing: border-box;
@@ -109,7 +109,7 @@ h3 {
     width: 25rem;
     margin: auto;
     background: var(--lineWhiteBack);
-    backdrop-filter: blur(0.5rem);
+    backdrop-filter: blur(1rem);
     border-radius: 2rem;
     mask: inherit;
     z-index: 3;
@@ -129,12 +129,18 @@ h3 {
     width: 50%;
     font-weight: 600;
 }
-
+.avatar{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
 .panel_title {
     position: sticky;
     top: 0rem;
     flex: 1;
     background: var(--lineWhite);
+    backdrop-filter: blur(1rem);
     padding: 1rem 2rem;
     margin-bottom: 2rem;
     display: flex;
@@ -151,7 +157,20 @@ h3 {
     justify-content: space-evenly;
     text-align: center;
 }
-
+.hidden{
+    display: none;
+}
+.list{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.list div{
+    margin: 1rem;
+}
+.text{
+    text-align: left;
+}
 .panel input {
     background: var(--lineWhite);
     border: none;

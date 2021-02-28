@@ -3,23 +3,33 @@
 {% block title %}Пользователь{% endblock %}
 
 {% block menu %}
-    {% if request.user == user_obj %}
-        <li><a href="{% url 'accounts:change' user_obj.pk %}">Редактировать</a></li>
-        <li><a href="{% url "accounts:password_change" %}">Смена пароля</a></li>
-    {% endif %}
+{% if request.user == user_obj %}
+<li><a href="{% url 'accounts:change' user_obj.pk %}">Редактировать</a></li>
+<li><a href="{% url "accounts:password_change" %}">Смена пароля</a></li>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    <h2>Личная страница пользователя {{ user_obj.get_full_name|default:user_obj.username }}</h2>
-    {% if user_obj.profile.avatar %}
-        <img class="avatar" src="{{ user_obj.profile.avatar.url }}" width="250" height="250" alt="user picture">
-    {% endif %}
-    <p>Имя пользователя: {{ user_obj.username }}</p>
-    <p>Имя: {{ user_obj.first_name }}</p>
-    <p>Фамилия: {{ user_obj.last_name }}</p>
-    <p>Дата рождения: {{ user_obj.profile.birth_date|date:'d.m.Y' }}</p>
-    <p>Почта: {{ user_obj.email }}</p>
-
-{#    <h2 class="text-center clear">Статьи автора:</h2>#}
-{#    {% include 'partial/article_list.html' %}#}
+<div class="panel">
+    <div class="panel_title">
+        <h2>Личная страница:</h2>
+        <h3>{{ user_obj.get_full_name|default:user_obj.username }}</h3>
+    </div>
+    <div class="panel_body">
+        <div class="list">
+            <div>
+                {% if user_obj.profile.avatar %}
+                <img class="avatar" src="{{ user_obj.profile.avatar.url }}" alt="user picture">
+                {% endif %}
+            </div>
+            <div>
+                <p class="text"><strong>Имя пользователя:</strong> {{ user_obj.username }}</p>
+                <p class="text"><strong>Имя:</strong> {{ user_obj.first_name }}</p>
+                <p class="text"><strong>Фамилия:</strong> {{ user_obj.last_name }}</p>
+                <p class="text"><strong>Дата рождения:</strong> {{ user_obj.profile.birth_date|date:'d.m.Y' }}</p>
+                <p class="text"><strong>Почта:</strong> {{ user_obj.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
