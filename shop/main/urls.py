@@ -17,12 +17,19 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from webapp.views import index
+from webapp.views import *
+from django.urls import reverse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
     path('accounts/', include('accounts.urls')),
     path('api/v1/auth/', include('rest_framework.urls')),
-    path('', index, name='index'),
+    path('api/v1/', include('api.urls')),
+    # path('', index, name='index'),
+    path('', IndexView.as_view(), name='index'),
+    path('category/<slug:category>/<slug:subcategory>/<int:pk>/',
+         CategoryListView.as_view(), name='subcategory'),
+    path('category/<slug:category>/<int:pk>',
+         CategoryListView.as_view(), name='category'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

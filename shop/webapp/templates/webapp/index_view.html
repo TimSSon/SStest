@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+
+{% block sidebar %}
+<div class="sidebar">
+<ul class="root">
+    {% recursetree data.category %}
+    <li>
+        <a href="{{node.get_absolute_url}}">
+            {{ node.name }}
+        </a>
+        {% if not node.is_leaf_node %}
+        <ul class="children">
+            <a href="#"> {{ children }}</a>
+        </ul>
+        {% endif %}
+    </li>
+    {% endrecursetree %}
+</ul>
+</div>
+{% endblock sidebar %}
+
+{% block content %}
+<div class="card_list">
+    {% for item in data.items %}
+
+    <div class='card'>
+        <div class="card_title">
+            <h2>{{item.name}}</h2>
+        </div>
+        <div class="card_body">
+            <h2>Категория: </h2>
+            <h3>{{item.category}} </h3>
+            <br>
+            <p>{{item.description|truncatechars:50}}</p>
+            <p><strong>Цена: </strong>{{item.price}}</p>
+            <br>
+            <input type="button" class='btn' value="Подробнее">
+        </div>
+    </div>{% endfor %}
+</div>
+{% endblock content %}

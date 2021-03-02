@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # external modules
     'rest_framework',
     'widget_tweaks',
+    'mptt',
+    # inner apps 
     'accounts',
     'webapp',
+    'api',
 ]
 
 MIDDLEWARE = [

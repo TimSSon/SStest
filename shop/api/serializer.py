@@ -1,24 +1,25 @@
+
 from rest_framework import serializers
 from accounts.models import Profile
+from webapp.models import Item, Category
+from django.contrib.auth import get_user_model
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', 'email')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+
     class Meta:
         model = Profile
-        exclude = ('user', )
-        # fields = ['name', 'avatar', 'phone', 'whatsapp', 'telegram']
+        fields = ('user', 'birth_date', 'avatar')
 
 
-class AdvertDetailSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Advert
+        model = Item
         fields = '__all__'
-
-
-class AdvertListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Advert
-        fields = ('id', 'user', 'title', 'brand',
-                  'model', 'body', 'price', 'photo')
