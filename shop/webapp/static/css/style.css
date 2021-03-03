@@ -5,7 +5,7 @@
     --secondary: #31313d;
     --white: #c3c3dd;
     --lineBright: linear-gradient(133.97deg, #C6C6DD 0%, #8080BB 100%);
-    --lineWhite: linear-gradient(305.29deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+    --lineWhite: linear-gradient(305.29deg, rgba(255, 255, 255, 0.733) 0%, rgba(255, 255, 255, 0.11) 100%);
     --lineWhiteBack: linear-gradient(305.29deg, rgba(255, 255, 255, 0.2) 0%, rgba(212, 212, 212, 0.4) 100%);
     --lineAccent: linear-gradient(133.97deg, #5D5DBA 0%, #404077 100%);
     --error: rgb(150, 0, 0);
@@ -77,7 +77,7 @@ h3 {
 
 .square {
     position: absolute;
-    background-color: var(--secondary);
+    background-color: var(--white);
     width: 15rem;
     height: 15rem;
     border-radius: 0.75rem;
@@ -87,6 +87,7 @@ h3 {
 #square1 {
     top: 15%;
     left: 15%;
+    background-color: var(--lineAccent);
 }
 
 #square2 {
@@ -298,7 +299,7 @@ h3 {
 
 .navbar {
     display: block;
-    height: 4rem;
+    min-height: 4rem;
     background: var(--lineWhite);
     backdrop-filter: blur(0.5rem);
     position: fixed;

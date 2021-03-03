@@ -102,7 +102,33 @@ h3 {
 }
 
 /* Backgorund END */
-
+.sidebar{
+    position: fixed;
+    top: 10rem;
+    left: 0rem;
+    width: 10rem;
+    height: auto;
+    margin: auto;
+    padding: 1rem;
+    background: var(--lineWhiteBack);
+    backdrop-filter: blur(1rem);
+    border-radius: 2rem;
+    mask: inherit;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+}
+.root{
+    margin: auto;
+    
+}
+.root li{
+    margin: 0.5rem;
+    text-decoration: none;
+}
+.root a{
+    text-decoration: none;
+}
 .panel {
     top: 5rem;
     max-height: 72%;
@@ -272,7 +298,7 @@ h3 {
 
 .navbar {
     display: block;
-    min-height: 3rem;
+    height: 4rem;
     background: var(--lineWhite);
     backdrop-filter: blur(0.5rem);
     position: fixed;
