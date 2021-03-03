@@ -31,7 +31,7 @@ SQL_PORT=5432
 DATABASE=postgres
 ```
   
-6. Выполнить команду в териманале ```docker-compose up --build```.
+6. Выполнить команду в терминале ```docker-compose up --build```.
 7. Следющие запуски после первичной сборки для запуска: ```docker-compose up``` и  для остановки:```docker-compose down```.
 8. Создать администратора ```docker exec -it shop python manage.py createsuperuser```
 9. Обращаться к джанго можно через ```docker exec -it shop python manage.py```
