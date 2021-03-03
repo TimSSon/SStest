@@ -5,12 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from accounts.models import AuthToken, Profile
 from webapp.models import Item
-from .serializer import RegisterSerializer, ItemSerializer, ProfileSerializer
+from .serializer import RegisterSerializer, ItemSerializer, ProfileSerializer, UpdateUserSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
-
-from .permission import IsOwnerReadOnly
 
 
 class RegisterView(CreateAPIView):
@@ -56,10 +54,7 @@ class ItemListView(ListAPIView):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
 
-
-class ProfileEdit(RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializer
-    permission_classes = (IsOwnerReadOnly,)
-
-    def get_object(self):
-        return Profile.objects.get(user=self.request.user)
+class UserEdit(RetrieveUpdateAPIView):
+    serializer_class = UpdateUserSerializer
+    queryset = get_user_model().objects.all()
+    # permission_classes = (IsOwnerReadOnly,)
