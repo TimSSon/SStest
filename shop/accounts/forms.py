@@ -11,8 +11,8 @@ from .models import AuthToken, Profile, TOKEN_TYPE_PASSWORD_RESET
 
 class MyUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        fields = ['username', 'password1', 'password2',
-                  'first_name', 'last_name', 'email']
+        fields = ['username', 'email', 'password1', 'password2',
+                  'first_name', 'last_name']
 
     def save(self, commit=True):
         if settings.ACTIVATE_USERS_EMAIL:
@@ -33,7 +33,8 @@ class MyUserCreationForm(UserCreationForm):
     def send_email(self, user, token):
         if user.email:
             subject = 'Вы создали учётную запись на сайте "Мой Блог"'
-            link = settings.BASE_HOST + reverse('accounts:activate', kwargs={'token': token.token})
+            link = settings.BASE_HOST + \
+                reverse('accounts:activate', kwargs={'token': token.token})
             message = f'''Здравствуйте, {user.username}!
 Вы создали учётную запись на сайте "Мой Блог"
 Активируйте её, перейдя по ссылке {link}.
@@ -52,7 +53,9 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name', 'email']
-        labels = {'first_name': 'Имя', 'last_name': 'Фамилия', 'email': 'Email'}
+        labels = {'first_name': 'Имя',
+                  'last_name': 'Фамилия', 'email': 'Email'}
+
 
 class ProfileChangeForm(forms.ModelForm):
     class Meta:
@@ -61,8 +64,10 @@ class ProfileChangeForm(forms.ModelForm):
 
 
 class SetPasswordForm(forms.ModelForm):
-    password = forms.CharField(label="Новый пароль", strip=False, widget=forms.PasswordInput)
-    password_confirm = forms.CharField(label="Подтвердите пароль", widget=forms.PasswordInput, strip=False)
+    password = forms.CharField(
+        label="Новый пароль", strip=False, widget=forms.PasswordInput)
+    password_confirm = forms.CharField(
+        label="Подтвердите пароль", widget=forms.PasswordInput, strip=False)
 
     def clean_password_confirm(self):
         password = self.cleaned_data.get("password")
@@ -84,7 +89,8 @@ class SetPasswordForm(forms.ModelForm):
 
 
 class PasswordChangeForm(SetPasswordForm):
-    old_password = forms.CharField(label="Старый пароль", strip=False, widget=forms.PasswordInput)
+    old_password = forms.CharField(
+        label="Старый пароль", strip=False, widget=forms.PasswordInput)
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
@@ -104,17 +110,20 @@ class PasswordResetEmailForm(forms.Form):
         email = self.cleaned_data.get('email')
         User = get_user_model()
         if User.objects.filter(email=email).count() == 0:
-            raise ValidationError('Пользователь с таким email-ом не зарегистрирован')
+            raise ValidationError(
+                'Пользователь с таким email-ом не зарегистрирован')
         return email
 
     def send_email(self):
         User = get_user_model()
         email = self.cleaned_data.get('email')
         user = User.objects.filter(email=email).first()
-        token = AuthToken.objects.create(user=user, life_days=3, type=TOKEN_TYPE_PASSWORD_RESET)
+        token = AuthToken.objects.create(
+            user=user, life_days=3, type=TOKEN_TYPE_PASSWORD_RESET)
 
         subject = 'Вы запросили восстановление пароля для учётной записи на сайте "Мой Блог"'
-        link = settings.BASE_HOST + reverse('accounts:password_reset', kwargs={'token': token.token})
+        link = settings.BASE_HOST + \
+            reverse('accounts:password_reset', kwargs={'token': token.token})
         message = f'''Ваша ссылка для восстановления пароля: {link}.
 Если вы считаете, что это ошибка, просто игнорируйте это письмо.'''
         html_message = f'''Ваша ссылка для восстановления пароля: <a href="{link}">{link}</a>.

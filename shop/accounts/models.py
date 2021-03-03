@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from uuid import uuid4
+from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 from datetime import timedelta
 
+User._meta.get_field('email')._unique = True
+User._meta.get_field('email').blank = False
+User._meta.get_field('email').null = False
 
 TOKEN_TYPE_REGISTER = 'register'
 TOKEN_TYPE_PASSWORD_RESET = 'password_reset'
