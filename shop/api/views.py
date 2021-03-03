@@ -4,13 +4,13 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
 from accounts.models import AuthToken, Profile
-from webapp.models import Item 
+from webapp.models import Item
 from .serializer import RegisterSerializer, ItemSerializer, ProfileSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
 
-# Create your views here.
+from .permission import IsOwnerReadOnly
 
 
 class RegisterView(CreateAPIView):
@@ -59,6 +59,7 @@ class ItemListView(ListAPIView):
 
 class ProfileEdit(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
+    permission_classes = (IsOwnerReadOnly,)
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
