@@ -3,10 +3,10 @@ Test task SunriseStudio
 ### FAQ
 
 #### API
-localhost:8000/api/v1/auth/ Встроенная Django REST Framework аунтификация
-localhost:8000/api/v1/register/ Регистрация
-localhost:8000/api/v1/items/ Все товары
-localhost:8000/api/v1/user/update/<int:pk>/  Обновление профиля
+* localhost:8000/api/v1/auth/ Встроенная Django REST Framework аунтификация
+* localhost:8000/api/v1/register/ Регистрация
+* localhost:8000/api/v1/items/ Все товары
+* localhost:8000/api/v1/user/update/<int:pk>/  Обновление профиля
 
 #### Начальная настройка
 
