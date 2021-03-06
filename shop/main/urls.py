@@ -28,8 +28,8 @@ urlpatterns = [
     path('api/v1/', include('api.urls')),
     # path('', index, name='index'),
     path('', IndexView.as_view(), name='index'),
-    path('category/<slug:category>/<slug:subcategory>/<int:pk>/',
+    path('category/<slug:category>/<slug:subcategory>/',
          CategoryListView.as_view(), name='subcategory'),
-    path('category/<slug:category>/<int:pk>',
+    path('category/<slug:subcategory>/',
          CategoryListView.as_view(), name='category'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

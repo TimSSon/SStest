@@ -11,14 +11,15 @@ class Category(MPTTModel):
     parent = TreeForeignKey('self', verbose_name=_("Родитель"), on_delete=models.CASCADE,
                             null=True, blank=True, related_name='children')
 
-    def get_absolute_url(self):  
+    def get_absolute_url(self):
         if self.parent_id:
             return reverse(
                 'subcategory',
-                kwargs={'category': self.parent.slug, 'subcategory': self.slug,'pk': self.pk}
+                kwargs={'category': self.parent.slug,
+                        'subcategory': self.slug}
             )
         else:
-            return reverse('category', args=[self.slug, self.pk])
+            return reverse('category', kwargs={'subcategory': self.slug})
 
     class MPTTMeta:
         level_attr = 'mptt_level'

@@ -3,27 +3,26 @@
 
 {% block sidebar %}
 <div class="sidebar">
-<ul class="root">
-    {% recursetree data.category %}
-    <li>
-        <a href="{{node.get_absolute_url}}">
-            {{ node.name }}
-        </a>
-        {% if not node.is_leaf_node %}
-        <ul class="children">
-            <a href="#"> {{ children }}</a>
-        </ul>
-        {% endif %}
-    </li>
-    {% endrecursetree %}
-</ul>
+    <ul class="root">
+        {% recursetree category %}
+        <li>
+            <a href="{{node.get_absolute_url}}">
+                {{ node.name }}
+            </a>
+            {% if not node.is_leaf_node %}
+            <ul class="children">
+                <a href="#"> {{ children }}</a>
+            </ul>
+            {% endif %}
+        </li>
+        {% endrecursetree %}
+    </ul>
 </div>
 {% endblock sidebar %}
 
 {% block content %}
-<div class="card_list">
-    {% for item in data.items %}
-
+<div class="grid">
+    {% for item in items %}
     <div class='card'>
         <div class="card_title">
             <h2>{{item.name}}</h2>
@@ -35,8 +34,22 @@
             <p>{{item.description|truncatechars:50}}</p>
             <p><strong>Цена: </strong>{{item.price}}</p>
             <br>
-            <input type="button" class='btn' value="Подробнее">
+
         </div>
+        <input type="button" class='btn' value="Подробнее">
     </div>{% endfor %}
+</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if items.has_previous %}
+        <a class='btn_page' href="?page={{ items.previous_page_number }}">
+            <<</a> {% else %} <a class='unactive' href="#">
+                <<</a> {% endif %} <span class="current">{{ items.number }}/{{ items.paginator.num_pages }}</span>
+    {% if items.has_next %}
+    <a class='btn_page' href="?page={{ items.next_page_number }}">>></a>
+    {% else %}
+    <a class='unactive' href="#">>></a>
+    {% endif %}
+    </span>
 </div>
 {% endblock content %}
